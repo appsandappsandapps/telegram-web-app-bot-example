@@ -156,11 +156,9 @@
     alert(JSON.stringify(Telegram.WebApp.initDataUnsafe))
     alert(document.location.search)
     
-    if (DemoApp.initDataUnsafe.query_id) {
-        document.getElementById('main_btn').style.display = 'block';
-    }
     document.getElementById('webview_data').innerHTML = JSON.stringify(DemoApp.initDataUnsafe, null, 2);
     if (DemoApp.initDataUnsafe.receiver) {
+        alert("there's a receiver")
         document.getElementById('peer_wrap').style.display = 'block';
         document.getElementById('peer_name').innerHTML = DemoApp.initDataUnsafe.receiver.first_name + ' ' + DemoApp.initDataUnsafe.receiver.last_name;
         if (DemoApp.initDataUnsafe.receiver.photo_url) {
