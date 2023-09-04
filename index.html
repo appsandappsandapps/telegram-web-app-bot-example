@@ -4,31 +4,17 @@
     <meta charset="utf-8">
     <meta name="viewport"
           content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="format-detection" content="telephone=no" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="MobileOptimized" content="176" />
     <meta name="HandheldFriendly" content="True" />
-    <meta name="robots" content="noindex,nofollow" />
     <title></title>
     <script src="https://telegram.org/js/telegram-web-app.js?1"></script>
-    <script>
-        function setThemeClass() {
-            document.documentElement.className = Telegram.WebApp.colorScheme;
-        }
-        Telegram.WebApp.onEvent('themeChanged', setThemeClass);
-        setThemeClass();
-    </script>
-    <style>
-    </style>
 </head>
 
 <body class="" style="visibility: hidden;">
 
 <section id="top_sect" class="second">
-    <button id="main_btn" onclick="DemoApp.sendMessage('');">Send «Hello, World!»</button>
-    <button id="with_webview_btn" onclick="DemoApp.sendMessage('', true);">Send «Hello, World!» with inline webview button</button>
     <button id="data_btn" onclick="DemoApp.sendTime(true);">Send current time to bot (x10)</button>
-    <input type="text" placeholder="Input text in regular input..." id="regular_field" />
     <div
         class="input"
         contenteditable="true"
@@ -62,12 +48,6 @@
 
 <script type="application/javascript">
 
-    /*
-     * This is a demo code for Telegram WebApp for Bots
-     * It contains basic examples of how to use the API
-     * Note: all requests to backend are disabled in this demo, you should use your own backend
-     */
-
     const DemoApp = {
         initData: Telegram.WebApp.initData || '',
         initDataUnsafe: Telegram.WebApp.initDataUnsafe || {},
@@ -84,9 +64,7 @@
                 alert('WebViewQueryId not defined');
                 return;
             }
-
-            document.querySelectorAll('button').forEach((btn) => btn.disabled = true);
-
+            
             const btn = document.querySelector('#btn_status');
             btn.textContent = 'Sending...';
 
@@ -94,69 +72,8 @@
                 msg_id: msg_id || '',
                 with_webview: !DemoApp.initDataUnsafe.receiver && with_webview ? 1 : 0
             }, function(result) {
-                document.querySelectorAll('button').forEach((btn) => btn.disabled = false);
-
-                if (result.response) {
-                    if (result.response.ok) {
-                        btn.textContent = 'Message sent successfully!';
-                        btn.className = 'ok';
-                        btn.style.display = 'block';
-                    } else {
-                        btn.textContent = result.response.description;
-                        btn.className = 'err';
-                        btn.style.display = 'block';
-                        alert(result.response.description);
-                    }
-                } else if (result.error) {
-                    btn.textContent = result.error;
-                    btn.className = 'err';
-                    btn.style.display = 'block';
-                    alert(result.error);
-                } else {
-                    btn.textContent = 'Unknown error';
-                    btn.className = 'err';
-                    btn.style.display = 'block';
-                    alert('Unknown error');
-                }
+                alert(result.response)
             });
-        },
-        changeMenuButton(close) {
-            document.querySelectorAll('button').forEach((btn) => btn.disabled = true);
-            const btnStatus = document.querySelector('#btn_status');
-            btnStatus.textContent = 'Changing button...';
-
-            DemoApp.apiRequest('changeMenuButton', {}, function(result) {
-                document.querySelectorAll('button').forEach((btn) => btn.disabled = false);
-
-                if (result.response) {
-                    if (result.response.ok) {
-                        btnStatus.textContent = 'Button changed!';
-                        btnStatus.className = 'ok';
-                        btnStatus.style.display = 'block';
-                        Telegram.WebApp.close();
-                    } else {
-                        btnStatus.textContent = result.response.description;
-                        btnStatus.className = 'err';
-                        btnStatus.style.display = 'block';
-                        alert(result.response.description);
-                    }
-                } else if (result.error) {
-                    btnStatus.textContent = result.error;
-                    btnStatus.className = 'err';
-                    btnStatus.style.display = 'block';
-                    alert(result.error);
-                } else {
-                    btnStatus.textContent = 'Unknown error';
-                    btnStatus.className = 'err';
-                    btnStatus.style.display = 'block';
-                    alert('Unknown error');
-                }
-            });
-            if (close) {
-                setTimeout(function() {
-                    Telegram.WebApp.close();
-                }, 50);
-            }
         },
         checkInitData() {
             const webViewStatus = document.querySelector('#webview_data_status');
@@ -176,21 +93,6 @@
                 });
             }
         },
-        sendText(spam) {
-            const textField = document.querySelector('#text_field');
-            const text = textField.value;
-            if (!text.length) {
-                return textField.focus();
-            }
-            if (byteLength(text) > 4096) {
-                return alert('Text is too long');
-            }
-
-            const repeat = spam ? 10 : 1;
-            for (let i = 0; i < repeat; i++) {
-                Telegram.WebApp.sendData(text);
-            }
-        },
         sendTime(spam) {
             const repeat = spam ? 10 : 1;
             for (let i = 0; i < repeat; i++) {
@@ -205,25 +107,6 @@
             // CHANGE THIS CODE TO YOUR OWN
             var d = JSON.stringify(data)
             return onCallback && onCallback({error: 'sent data: ' + d});
-
-            const authData = DemoApp.initData || '';
-            fetch('/demo/api', {
-                method: 'POST',
-                body: JSON.stringify(Object.assign(data, {
-                    _auth: authData,
-                    method: method,
-                })),
-                credentials: 'include',
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            }).then(function(response) {
-                return response.json();
-            }).then(function(result) {
-                onCallback && onCallback(result);
-            }).catch(function(error) {
-                onCallback && onCallback({error: 'Server error'});
-            });
         }
     }
 
@@ -236,27 +119,8 @@
     const DemoAppInitData = {
         init() {
             DemoApp.init();
-            Telegram.WebApp.onEvent('themeChanged', function() {
-                document.getElementById('theme_data').innerHTML = JSON.stringify(Telegram.WebApp.themeParams, null, 2);
-            });
             document.getElementById('webview_data').innerHTML = JSON.stringify(DemoApp.initDataUnsafe, null, 2);
-            document.getElementById('theme_data').innerHTML = JSON.stringify(Telegram.WebApp.themeParams, null, 2);
             DemoApp.checkInitData();
-        }
-    };
-
-    const DemoAppViewport = {
-        init() {
-            DemoApp.init();
-            Telegram.WebApp.onEvent('viewportChanged', DemoAppViewport.setData);
-            DemoAppViewport.setData();
-        },
-        setData() {
-            document.querySelector('.viewport-border')
-                .setAttribute('text', window.innerWidth + ' x ' + round(Telegram.WebApp.viewportHeight, 2))
-            document.querySelector('.viewport-stable_border')
-                .setAttribute('text', window.innerWidth + ' x ' + round(Telegram.WebApp.viewportStableHeight, 2) +
-                    ' | is_expanded: ' + (Telegram.WebApp.isExpanded ? 'true' : 'false'));
         }
     };
 
@@ -297,8 +161,6 @@
     }
     document.getElementById('with_webview_btn').style.display = !!DemoApp.initDataUnsafe.query_id && !DemoApp.initDataUnsafe.receiver ? 'block' : 'none';
     document.getElementById('webview_data').innerHTML = JSON.stringify(DemoApp.initDataUnsafe, null, 2);
-
-    document.getElementById('theme_data').innerHTML = JSON.stringify(Telegram.WebApp.themeParams, null, 2);
     if (DemoApp.initDataUnsafe.receiver) {
         document.getElementById('peer_wrap').style.display = 'block';
         document.getElementById('peer_name').innerHTML = DemoApp.initDataUnsafe.receiver.first_name + ' ' + DemoApp.initDataUnsafe.receiver.last_name;
@@ -319,9 +181,6 @@
 
     DemoApp.checkInitData();
     DemoApp.init();
-    Telegram.WebApp.onEvent('settingsButtonClicked', function() {
-        alert('Settings opened!');
-    });
 </script>
 
 </body>
