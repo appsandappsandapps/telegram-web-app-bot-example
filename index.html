@@ -39,15 +39,6 @@
         <img id="peer_photo" class="chat_img" src="">
         <span id="peer_name"></span>
     </div>
-    <div class="sect_row">Header: <select id="header_color_sel">
-        <option value="bg_color" selected>bg_color</option>
-        <option value="secondary_bg_color">secondary_bg_color</option>
-    </select></div>
-    <div class="sect_row">Background: <input type="color" id="bg_color_input" /> <select id="bg_color_sel">
-        <option value="bg_color" selected>bg_color</option>
-        <option value="secondary_bg_color">secondary_bg_color</option>
-        <option value="custom" id="bg_color_val">custom...</option>
-    </select></div>
 </section>
 <section>
     <div id="btn_status" class="hint" style="display: none;">
@@ -85,10 +76,6 @@
         init(options) {
             document.body.style.visibility = '';
             Telegram.WebApp.ready();
-            Telegram.WebApp.MainButton.setParams({
-                text: 'CLOSE WEBVIEW',
-                is_visible: true
-            }).onClick(DemoApp.close);
         },
 
         // actions
@@ -216,8 +203,8 @@
             // DISABLE BACKEND FOR FRONTEND DEMO
             // YOU CAN USE YOUR OWN REQUESTS TO YOUR OWN BACKEND
             // CHANGE THIS CODE TO YOUR OWN
-            alert(data)
-            return onCallback && onCallback({error: 'This function (' + method + ') should send requests to your backend. Please, change this code to your own.'});
+            var d = JSON.stringify(data)
+            return onCallback && onCallback({error: 'send data': d});
 
             const authData = DemoApp.initData || '';
             fetch('/demo/api', {
@@ -243,8 +230,6 @@
     const DemoAppMenu = {
         init() {
             DemoApp.init();
-            document.body.classList.add('gray');
-            Telegram.WebApp.setHeaderColor('secondary_bg_color');
         }
     };
 
@@ -303,13 +288,6 @@
 </script>
 
 <script type="application/javascript">
-    /*
-     * This part of code is used to initialize the demo app and set up the event handlers we need.
-     */
-
-    Telegram.WebApp.onEvent('themeChanged', function() {
-        document.getElementById('theme_data').innerHTML = JSON.stringify(Telegram.WebApp.themeParams, null, 2);
-    });
     
     alert(JSON.stringify(Telegram.WebApp.initDataUnsafe))
     alert(document.location.search)
