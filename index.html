@@ -206,7 +206,6 @@
         },
         checkInitData() {
             const webViewStatus = document.querySelector('#webview_data_status');
-            alert(DemoApp.initData)
             if (DemoApp.initDataUnsafe.query_id &&
                 DemoApp.initData &&
                 webViewStatus.classList.contains('status_need')
@@ -451,7 +450,10 @@
     Telegram.WebApp.onEvent('themeChanged', function() {
         document.getElementById('theme_data').innerHTML = JSON.stringify(Telegram.WebApp.themeParams, null, 2);
     });
+    
+    alert(Telegram.WebApp.initDataUnsafe)
 
+    
     if (DemoApp.initDataUnsafe.query_id) {
         document.getElementById('main_btn').style.display = 'block';
     }
@@ -459,20 +461,6 @@
     document.getElementById('webview_data').innerHTML = JSON.stringify(DemoApp.initDataUnsafe, null, 2);
 
     document.getElementById('theme_data').innerHTML = JSON.stringify(Telegram.WebApp.themeParams, null, 2);
-    document.getElementById('regular_link').setAttribute('href', document.getElementById('regular_link').getAttribute('href') + location.hash);
-    document.getElementById('text_field').focus();
-    document.getElementById('regular_field').addEventListener('input', function(e) {
-        const val = this.value.toLowerCase();
-        if (val.indexOf('progress') >= 0) {
-            Telegram.WebApp.MainButton.showProgress();
-        } else {
-            Telegram.WebApp.MainButton.hideProgress();
-        }
-    });
-
-    document.getElementById('ver').innerHTML = Telegram.WebApp.version;
-    document.getElementById('platform').innerHTML = Telegram.WebApp.platform;
-
     if (DemoApp.initDataUnsafe.receiver) {
         document.getElementById('peer_wrap').style.display = 'block';
         document.getElementById('peer_name').innerHTML = DemoApp.initDataUnsafe.receiver.first_name + ' ' + DemoApp.initDataUnsafe.receiver.last_name;
@@ -542,13 +530,6 @@
             prevBgColorVal = headerColorSel.value;
         }
     });
-
-    Telegram.WebApp.onEvent('themeChanged', function() {
-        bgColorInput.value = Telegram.WebApp.backgroundColor;
-        document.body.setAttribute('style', '--bg-color:' + Telegram.WebApp.backgroundColor);
-    });
-
-    DemoApp.testClipboard(document.getElementById('clipboard_test'));
 </script>
 
 </body>
