@@ -1,164 +1,31 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta name="viewport"
-          content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-    <meta name="MobileOptimized" content="176" />
-    <meta name="HandheldFriendly" content="True" />
-    <title></title>
-    <script src="https://telegram.org/js/telegram-web-app.js?1"></script>
-</head>
+    <head>
+        <meta charset="utf-8">
+        <meta name="viewport"
+              content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+        <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+        <meta name="MobileOptimized" content="176" />
+        <meta name="HandheldFriendly" content="True" />
+        <title></title>
+        <script src="https://telegram.org/js/telegram-web-app.js?1"></script>
+    </head>
+    <body>
 
-<body class="" style="visibility: hidden;">
-
-<section id="top_sect" class="second">
-    <button id="data_btn" onclick="DemoApp.sendTime(true);">Send current time to bot (x10)</button>
-    <div
-        class="input"
-        contenteditable="true"
-        data-placeholder="Input text in contenteditable field..."
-        id="text_field"
-    ></div>
-    <div id="peer_wrap" style="display:none">
-        <img id="peer_photo" class="chat_img" src="">
-        <span id="peer_name"></span>
-    </div>
-</section>
-<section>
-    <div id="btn_status" class="hint" style="display: none;">
-    </div>
-    <pre><code id="webview_data"></code></pre>
-    <div class="hint">
-        Data passed to webview.
-        <span id="webview_data_status" class="status_need">Checking hash...</span>
-    </div>
-    <pre><code id="theme_data"></code></pre>
-    <div class="hint">
-        Theme params
-    </div>
-    <div class="hint">
-        Version: <span id="ver"></span>,
-        platform: <span id="platform"></span>
-    </div>
-</section>
-<div class="viewport-border"></div>
-<div class="viewport-stable_border"></div>
-
-<script type="application/javascript">
-
-    const DemoApp = {
-        initData: Telegram.WebApp.initData || '',
-        initDataUnsafe: Telegram.WebApp.initDataUnsafe || {},
-        MainButton: Telegram.WebApp.MainButton,
-
-        init(options) {
-            document.body.style.visibility = '';
-            Telegram.WebApp.ready();
-        },
-
-        // actions
-        sendMessage(msg_id, with_webview) {
-            if (!DemoApp.initDataUnsafe.query_id) {
-                alert('WebViewQueryId not defined');
-                return;
-            }
-            
-            const btn = document.querySelector('#btn_status');
-            btn.textContent = 'Sending...';
-
-            DemoApp.apiRequest('sendMessage', {
-                msg_id: msg_id || '',
-                with_webview: !DemoApp.initDataUnsafe.receiver && with_webview ? 1 : 0
-            }, function(result) {
-                alert(result.response)
-            });
-        },
-        checkInitData() {
-            const webViewStatus = document.querySelector('#webview_data_status');
-            if (DemoApp.initDataUnsafe.query_id &&
-                DemoApp.initData &&
-                webViewStatus.classList.contains('status_need')
-            ) {
-                webViewStatus.classList.remove('status_need');
-                DemoApp.apiRequest('checkInitData', {}, function(result) {
-                    if (result.ok) {
-                        webViewStatus.textContent = 'Hash is correct (async)';
-                        webViewStatus.className = 'ok';
-                    } else {
-                        webViewStatus.textContent = result.error + ' (async)';
-                        webViewStatus.className = 'err';
-                    }
-                });
-            }
-        },
-        sendTime(spam) {
-            const repeat = spam ? 10 : 1;
-            for (let i = 0; i < repeat; i++) {
-                Telegram.WebApp.sendData(new Date().toString());
-            }
-        },
+        <section>
+            <button id="data_btn" onclick="DemoApp.sendTime(true);">Send current time to bot</button>
+        </section>
+        <section>
+            <pre><code id="webview_data"></code></pre>
+        </section>
         
-        // Other
-        apiRequest(method, data, onCallback) {
-            // DISABLE BACKEND FOR FRONTEND DEMO
-            // YOU CAN USE YOUR OWN REQUESTS TO YOUR OWN BACKEND
-            // CHANGE THIS CODE TO YOUR OWN
-            var d = JSON.stringify(data)
-            return onCallback && onCallback({error: 'sent data: ' + d});
+        <script>
+        document.getElementById('webview_data').innerHTML = JSON.stringify(Telegram.WebApp.initDataUnsafe, null, 2)
+        alert(document.location.search)
+        function sendTime() {
+          Telegram.WebApp.sendData(new Date().toString())
         }
-    }
+        </script>
 
-    const DemoAppMenu = {
-        init() {
-            DemoApp.init();
-        }
-    };
-
-    const DemoAppInitData = {
-        init() {
-            DemoApp.init();
-            document.getElementById('webview_data').innerHTML = JSON.stringify(DemoApp.initDataUnsafe, null, 2);
-            DemoApp.checkInitData();
-        }
-    };
-
-    function byteLength(str) {
-        if (window.Blob) {
-            try { return new Blob([str]).size; } catch (e) {}
-        }
-
-        let s = str.length;
-        for (let i = str.length - 1; i >= 0; i--) {
-            const code = str.charCodeAt(i);
-            if (code > 0x7f && code <= 0x7ff) {
-                s++;
-            } else if (code > 0x7ff && code <= 0xffff) {
-                s+=2;
-            }
-
-            if (code >= 0xDC00 && code <= 0xDFFF) {
-                i--;
-            }
-        }
-        return s;
-    }
-
-    function round(val, d) {
-        const k = Math.pow(10, d || 0);
-        return Math.round(val * k) / k;
-    }
-</script>
-
-<script type="application/javascript">
-    
-    alert(JSON.stringify(Telegram.WebApp.initDataUnsafe))
-    alert(document.location.search)
-    document.getElementById('webview_data').innerHTML = JSON.stringify(DemoApp.initDataUnsafe, null, 2);
-    DemoApp.checkInitData();
-    DemoApp.init();
-</script>
-
-</body>
+    </body>
 </html>
