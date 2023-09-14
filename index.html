@@ -20,7 +20,17 @@
         </section>
         
         <script>
-        document.getElementById('webview_data').innerHTML = decodeURIComponent(document.location.search.slice(1))
+
+        async function decompressGzip(gzipString) {
+          const compressedBytes = Uint8Array.from(atob(gzipString), c => c.charCodeAt(0));
+          const cs = new DecompressionStream("gzip");
+          const decompressedStream = compressedBytes.pipeThrough(cs);
+          const decompressedBytes = new Uint8Array(await new Response(decompressedStream).arrayBuffer());
+          const decompressedString = new TextDecoder().decode(decompressedBytes);
+          return decompressedString;
+        }
+            
+        document.getElementById('webview_data').innerHTML = atob(document.location.search.slice(1))
             //JSON.stringify(Telegram.WebApp.initDataUnsafe, null, 2)
         //alert(document.location.search)
         function sendTime() {
