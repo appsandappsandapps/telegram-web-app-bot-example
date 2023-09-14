@@ -20,8 +20,9 @@
         </section>
         
         <script>
-        document.getElementById('webview_data').innerHTML = JSON.stringify(Telegram.WebApp.initDataUnsafe, null, 2)
-        alert(document.location.search)
+        document.getElementById('webview_data').innerHTML = decodeURIComponent(document.location.search.slice(1))
+            //JSON.stringify(Telegram.WebApp.initDataUnsafe, null, 2)
+        //alert(document.location.search)
         function sendTime() {
           Telegram.WebApp.sendData(new Date().toString())
         }
