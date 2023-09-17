@@ -11,19 +11,21 @@
     </head>
     <body>
 
-        <button onclick="sendTime();">Send current time to bot</button>
         <input
             id="datePicker"
             type="date"
             value="2018-06-12"
         />
+        <button onclick="sendUpdatedDate();">Send date bot</button>
+        <br><br>
         <pre><code id="textAreaForPassedData"></code></pre>
         
         <script>
 
         // Example method that sends data to the Telegram bot
-        function sendTime() {
-          Telegram.WebApp.sendData(new Date().toString())
+        function sendUpdatedDate() {
+          var datePicker = document.getElementById('datePicker')
+          Telegram.WebApp.sendData(datePicker.value)
         }
 
         // References to HTML elements
