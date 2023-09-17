@@ -22,6 +22,8 @@
         
         <script>
 
+        Telegram.WebApp.ready();
+            
         // Example method that sends data to the Telegram bot
         function sendUpdatedDate() {
           var datePicker = document.getElementById('datePicker')
@@ -39,7 +41,7 @@
 
         // Setting the datePicker based on the data from the URL
         datePicker.value = `${dataFromURL.year}-${dataFromURL.month}-${dataFromURL.day}`
-            
+           
         </script>
 
     </body>
