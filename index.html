@@ -12,30 +12,26 @@
     </head>
     <body>
 
-        <section>
-            <button onclick="sendTime();">Send current time to bot</button>
-        </section>
-        <section>
-            <pre><code id="webview_data"></code></pre>
-        </section>
+        <button onclick="sendTime();">Send current time to bot</button>
+        <input
+            id="datePicker"
+            type="datetime"
+            value="2018-06-12"
+        />
+        <pre><code id="webview_data"></code></pre>
         
         <script>
 
-        async function decompressGzip(gzipString) {
-          const compressedBytes = Uint8Array.from(atob(gzipString), c => c.charCodeAt(0));
-          const cs = new DecompressionStream("gzip");
-          const decompressedStream = compressedBytes.pipeThrough(cs);
-          const decompressedBytes = new Uint8Array(await new Response(decompressedStream).arrayBuffer());
-          const decompressedString = new TextDecoder().decode(decompressedBytes);
-          return decompressedString;
-        }
-            
-        document.getElementById('webview_data').innerHTML = atob(document.location.search.slice(1))
-            //JSON.stringify(Telegram.WebApp.initDataUnsafe, null, 2)
-        //alert(document.location.search)
         function sendTime() {
           Telegram.WebApp.sendData(new Date().toString())
         }
+            
+        var dataFromURLAsString = atob(document.location.search.slice(1))
+        var dataFromURL = JSON.parse(dataFromURLAsString)
+        var datePicker = document.getElementById('datePicker')
+        datePicker.value = `${dateFromURL.year}-${dateFromURL.month}-${dateFromURL.day}`
+        document.getElementById('webview_data').innerHTML = dataFromURLAsString
+
         </script>
 
     </body>
