@@ -27,9 +27,10 @@
         }
             
         var dataFromURLAsString = atob(document.location.search.slice(1))
+        alert(dataFromURLAsString)
         var dataFromURL = JSON.parse(dataFromURLAsString)
         var datePicker = document.getElementById('datePicker')
-        datePicker.value = `${dateFromURL.year}-${dateFromURL.month}-${dateFromURL.day}`
+        dataPicker.value = `${dataFromURL.year}-${dataFromURL.month}-${dateFromURL.day}`
         document.getElementById('webview_data').innerHTML = dataFromURLAsString
 
         </script>
