@@ -1,4 +1,4 @@
-e<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
     <head>
         <meta charset="utf-8">
@@ -27,13 +27,13 @@ e<!DOCTYPE html>
         }
 
         // References to HTML elements
-        var textAreaForInsertedCode = document.getElementById('textAreaForPassedData')
+        var textAreaForDataFromURL = document.getElementById('textAreaForPassedData')
         var datePicker = document.getElementById('datePicker')
 
         // Getting the data from the URL
         var dataFromURLAsString = atob(document.location.search.slice(1))
         var dataFromURL = JSON.parse(dataFromURLAsString)
-        textAreaForInsertedCode.innerHTML = dataFromURLAsString            
+        textAreaForDataFromURL.innerHTML = dataFromURLAsString            
 
         // Setting the datePicker based on the data from the URL
         datePicker.value = `${dataFromURL.year}-${dataFromURL.month}-${dataFromURL.day}`
